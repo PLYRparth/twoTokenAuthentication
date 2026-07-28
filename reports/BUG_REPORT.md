@@ -47,15 +47,15 @@ The preview asset is directly accessible through a public URL.
 
 **Network request exposing preview asset**
 
-![](https://chatgpt.com/backend-api/estuary/content?id=file_00000000ef38822f86927a2d7caea7aa&ts=495899&p=fs&cid=1&sig=36e362422350a13c0f57cf6a6bbb57b5f87b86791da843ac69239288340c6c30&v=0)
+![](screenshots/Screenshot%202026-07-28%20161121.png)
 
 **Direct preview URL opened in browser**
 
-![](https://chatgpt.com/backend-api/estuary/content?id=file_00000000f770822f9792e15c0214aa25&ts=495899&p=fs&cid=1&sig=4b28603e25ea1bbe95e4712c046684e54b115f2591fd9e987e1b579447d253cc&v=0)
+![](screenshots/Screenshot%202026-07-28%20161141.png)
 
 **API response exposing `previewURL`**
 
-![](https://chatgpt.com/backend-api/estuary/content?id=file_0000000043c4822fb41508a2547a24d4&ts=495899&p=fs&cid=1&sig=4ad3334749bb7f9e73d7c2bd43a01c8da7093d43cfa5f93b84ff094911c9dd43&v=0)
+![](screenshots/Screenshot%202026-07-28%20161525.png)
 
 ------------------------------------------------------------------------
 
@@ -76,7 +76,7 @@ cookie was observed during testing.
 
 ### Evidence
 
-![](https://chatgpt.com/backend-api/estuary/content?id=file_000000008348822fa810d753dcac4a87&ts=495899&p=fs&cid=1&sig=68a79ba8b23f5d48cef82ba298b47987fcc2d525d56348a95a5bc9b7e3f03611&v=0)
+![](screenshots/Screenshot%202026-07-28%20161819.png)
 
 ------------------------------------------------------------------------
 
@@ -104,7 +104,7 @@ No action occurs.
 
 ### Evidence
 
-![](https://chatgpt.com/backend-api/estuary/content?id=file_000000009e10822f9742a1a592394d62&ts=495899&p=fs&cid=1&sig=05b6df5e4d4f0c778fb7108dd4b78e4849b22b9231149cb429b3de4300316d5d&v=0)
+![](screenshots/Screenshot%202026-07-28%20162044.png)
 
 ------------------------------------------------------------------------
 
@@ -119,7 +119,7 @@ placeholders for an extended period before rendering content.
 
 ### Evidence
 
-![](https://chatgpt.com/backend-api/estuary/content?id=file_00000000dc00822f90b2c8640f3c95ea&ts=495899&p=fs&cid=1&sig=09403d45cadab59b8f6162d5d8247b30491a187851b88cd76879d5a4456ad605&v=0)
+![](screenshots/Screenshot%202026-07-28%20162339.png)
 
 ------------------------------------------------------------------------
 
