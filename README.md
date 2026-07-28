@@ -62,8 +62,8 @@ sequenceDiagram
 ## Assignment Deliverables
 
 - **GitHub Repository:** `[INSERT_GITHUB_REPO_URL]`
-- **Live Frontend:** `[INSERT_LIVE_FRONTEND_URL]`
-- **Live Backend:** `[INSERT_LIVE_BACKEND_URL]`
+- **Live Frontend:** `https://two-token-authentication.vercel.app`
+- **Live Backend:** `https://twotokenauthentication.up.railway.app`
 - **Prompt Transcript Link:** `[INSERT_TRANSCRIPT_LINK]`
 - **Bug & SEO Report Link:** `[INSERT_BUG_SEO_REPORT_LINK]`
 - **Architecture Summary:** MERN stack utilizing two-token JWT architecture with strict refresh token rotation and Axios interceptors.
@@ -159,9 +159,9 @@ sequenceDiagram
 - **Secure Cookie Configuration**
   *Challenge:* Reconciling local development (HTTP) with production deployment (HTTPS) requirements.
   *Solution:* Bound the `secure` flag strictly to `process.env.NODE_ENV === 'production'`, ensuring compatibility across all environments.
-- **Cross-origin Authentication**
-  *Challenge:* Browsers rejected HttpOnly cookies on cross-origin API requests during local development.
-  *Solution:* Explicitly configured the Express CORS middleware with `credentials: true` and strictly whitelisted the client origin.
+- **Cross-origin Authentication & Third-Party Cookies**
+  *Challenge:* Browsers rejected HttpOnly cookies on cross-origin API requests during local development and entirely blocked them in production across different domains (`.vercel.app` to `.railway.app`).
+  *Solution:* Configured Express CORS middleware with `credentials: true`. For production, created a `vercel.json` rewrite rule to proxy frontend `/api` requests to the Railway backend, tricking the browser into treating them as first-party requests and allowing the HttpOnly cookie to be saved securely.
 - **Managing Protected Routes**
   *Challenge:* Unauthenticated users triggered unnecessary API calls resulting in console errors before redirection.
   *Solution:* Designed a `ProtectedRoute` wrapper evaluating the global loading state and `user` context, preventing unauthenticated component mounting.
