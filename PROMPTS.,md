@@ -1,0 +1,481 @@
+1. i have initialized a react project in @[client] and backend ( express ) in @[server] 
+  use @[DESIGN.md] for design reference 
+  and use @[.agents/skills] for development skill and instructions
+
+2. You are an experienced Senior MERN Stack Engineer.
+
+Your task is to build a production-quality MERN Authentication application that demonstrates industry best practices. This project is for a technical internship assessment, so the code should be clean, modular, secure, and easy to understand.
+
+The goal is NOT to build a large application.
+The goal is to demonstrate a proper authentication architecture using Access Tokens and Refresh Tokens.
+
+Stack:
+
+Frontend
+- React (Vite)
+- React Router
+- Axios
+- Tailwind CSS
+- React Hot Toast
+- React Hook Form
+- Zod (validation)
+
+Backend
+- Node.js
+- Express
+- MongoDB
+- Mongoose
+- JWT
+- bcryptjs
+- cookie-parser
+- cors
+- dotenv
+- helmet
+- express-rate-limit
+- morgan
+
+Deployment Ready
+- Frontend -> Vercel
+- Backend -> Railway or Render
+- MongoDB Atlas
+
+PROJECT STRUCTURE:
+
+client/
+
+src/
+components/
+pages/
+layouts/
+hooks/
+context/
+services/
+utils/
+constants/
+App.jsx
+main.jsx
+
+server/
+
+controllers/
+routes/
+middleware/
+models/
+config/
+services/
+utils/
+validators/
+app.js
+server.js
+
+3. Database Schemas : 
+
+User Schema
+
+- name
+- email
+- password (hashed)
+- refreshToken
+- createdAt
+- updatedAt
+
+Email must be unique.
+
+4. Authentication :
+
+Implement JWT Authentication using TWO TOKENS.
+
+Access Token
+
+- expires in 15 minutes
+- sent in Authorization header
+
+
+Refresh Token
+
+- expires in 7 days
+- stored inside HttpOnly Cookie
+- also stored in database
+- used to generate new access tokens
+
+Implement Refresh Token Rotation.
+
+Whenever /refresh is called,
+
+- verify refresh token
+- issue new refresh token
+- replace previous refresh token in database
+- return new access token
+
+API ROUTES:
+
+POST /api/auth/signup
+
+Creates new account
+
+Validation
+
+- name required
+- valid email
+- password minimum 8 characters
+
+Hash password using bcrypt.
+
+-----------------------------------------------------------
+
+POST /api/auth/login
+
+Returns
+
+- access token
+
+Sets
+
+- refresh token cookie
+
+-----------------------------------------------------------
+
+POST /api/auth/refresh
+
+Uses refresh token
+
+Returns new access token
+
+Rotates refresh token.
+
+-----------------------------------------------------------
+
+POST /api/auth/logout
+
+Clears cookie
+
+Removes refresh token from database
+
+-----------------------------------------------------------
+
+GET /api/user/profile
+
+Protected route
+
+Returns
+
+- id
+- name
+- email
+
+MIDDLEWARES:
+
+Create middleware
+
+authenticateUser
+
+Should
+
+- verify access token
+- attach user to request
+- reject invalid token
+
+4. FRONTEND
+
+Pages
+
+Home
+
+Signup
+
+Login
+
+Dashboard (Protected)
+
+404 Page
+
+===========================================================
+UI
+===========================================================
+
+Modern
+
+Dark theme
+
+Minimal
+
+Professional
+
+Responsive
+
+Cards
+
+Smooth animations
+
+Gradient buttons
+
+Loading indicators
+
+Skeleton loaders where appropriate
+
+Toast notifications
+
+===========================================================
+SIGNUP PAGE
+===========================================================
+
+Fields
+
+Name
+
+Email
+
+Password
+
+Confirm Password
+
+Validation
+
+Password strength indicator
+
+Disable button while submitting
+
+Success toast
+
+===========================================================
+LOGIN PAGE
+===========================================================
+
+Fields
+
+Email
+
+Password
+
+Remember me checkbox (UI only)
+
+Loading state
+
+Error handling
+
+===========================================================
+DASHBOARD
+===========================================================
+
+Protected Route
+
+If user not authenticated
+
+redirect to login
+
+Dashboard should display
+
+Welcome {name}
+
+Email
+
+Account created date
+
+Authentication status
+
+Access Token expiry countdown (optional but preferred)
+
+Logout button
+
+===========================================================
+AXIOS
+===========================================================
+
+Create Axios instance.
+
+Automatically
+
+- attach access token
+
+If API returns 401
+
+Automatically call
+
+POST /refresh
+
+Receive new access token
+
+Retry original request
+
+User should never notice.
+
+===========================================================
+STATE MANAGEMENT
+===========================================================
+
+Use Context API.
+
+Create AuthContext.
+
+Store
+
+- user
+- access token
+- loading state
+- login()
+- logout()
+- signup()
+- refresh()
+
+===========================================================
+SECURITY
+===========================================================
+
+Hash passwords
+
+Never expose refresh token
+
+Use HttpOnly Cookies
+
+Use Helmet
+
+Use CORS properly
+
+Rate limit login route
+
+Validate every request
+
+Sanitize input
+
+Environment variables
+
+No secrets committed
+
+===========================================================
+ERROR HANDLING
+===========================================================
+
+Centralized error handler
+
+Consistent JSON responses
+
+Example
+
+{
+ success:false,
+ message:"",
+ errors:[]
+}
+
+===========================================================
+SUCCESS RESPONSES
+===========================================================
+
+{
+ success:true,
+ message:"",
+ data:{}
+}
+
+===========================================================
+FORM VALIDATION
+===========================================================
+
+React Hook Form
+
+Zod
+
+Backend validation also required
+
+===========================================================
+README
+===========================================================
+
+Generate a professional README containing
+
+Project Overview
+
+Features
+
+Architecture
+
+Folder Structure
+
+Authentication Flow
+
+API Endpoints
+
+Environment Variables
+
+Installation
+
+Running Locally
+
+Deployment
+
+Future Improvements
+
+===========================================================
+BONUS FEATURES
+===========================================================
+
+Implement ALL of the following
+
+✓ Protected Routes
+
+✓ Refresh Token Rotation
+
+✓ Axios Interceptor
+
+✓ Toast Notifications
+
+✓ Password Strength Meter
+
+✓ Loading Skeleton
+
+✓ Responsive UI
+
+✓ Error Boundaries
+
+✓ Global Error Handler
+
+✓ Custom Hooks
+
+✓ Reusable Components
+
+✓ Environment Config
+
+✓ Code Splitting
+
+✓ Lazy Loading
+
+✓ Professional Folder Structure
+
+===========================================================
+CODE STYLE
+===========================================================
+
+Use modern ES Modules.
+
+Follow clean architecture.
+
+Separate controllers, routes, services and middleware.
+
+Avoid duplicate code.
+
+Create reusable utilities.
+
+Use descriptive variable names.
+
+Comment only where necessary.
+
+Do NOT generate placeholder code.
+
+Do NOT leave TODOs.
+
+Generate production-quality code.
+
+===========================================================
+FINAL OUTPUT
+===========================================================
+
+Build a complete, deployable MERN application.
+
+Ensure frontend and backend work together without modification.
+
+The application should be deployable immediately to Vercel + Railway + MongoDB Atlas.
+
+Prioritize security, maintainability, scalability, and clean code over unnecessary features.
+
+
+5.  remove all unecessary files you added in the project
