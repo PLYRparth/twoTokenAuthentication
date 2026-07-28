@@ -55,7 +55,7 @@ The preview asset is directly accessible through a public URL.
 
 **API response exposing `previewURL`**
 
-![](screenshots/Screenshot%202026-07-28%20161525.png)
+![](screenshots/Screenshot%202026-07-28%20161819.png)
 
 ------------------------------------------------------------------------
 
@@ -76,7 +76,7 @@ cookie was observed during testing.
 
 ### Evidence
 
-![](screenshots/Screenshot%202026-07-28%20161819.png)
+![](screenshots/Screenshot%202026-07-28%20161525.png)
 
 ------------------------------------------------------------------------
 
@@ -104,7 +104,7 @@ No action occurs.
 
 ### Evidence
 
-![](screenshots/Screenshot%202026-07-28%20162044.png)
+![](screenshots/Screenshot%202026-07-28%20162339.png)
 
 ------------------------------------------------------------------------
 
@@ -119,7 +119,7 @@ placeholders for an extended period before rendering content.
 
 ### Evidence
 
-![](screenshots/Screenshot%202026-07-28%20162339.png)
+![](screenshots/Screenshot%202026-07-28%20162044.png)
 
 ------------------------------------------------------------------------
 
