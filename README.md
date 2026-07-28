@@ -61,11 +61,10 @@ sequenceDiagram
 
 ## Assignment Deliverables
 
-- **GitHub Repository:** `[INSERT_GITHUB_REPO_URL]`
+- **GitHub Repository:** `https://github.com/PLYRparth/twoTokenAuthentication`
 - **Live Frontend:** `https://two-token-authentication.vercel.app`
 - **Live Backend:** `https://twotokenauthentication.up.railway.app`
-- **Prompt Transcript Link:** `[INSERT_TRANSCRIPT_LINK]`
-- **Bug & SEO Report Link:** `[INSERT_BUG_SEO_REPORT_LINK]`
+
 - **Architecture Summary:** MERN stack utilizing two-token JWT architecture with strict refresh token rotation and Axios interceptors.
 - **Deployment Summary:** Frontend hosted on Vercel, API managed via Railway, Database hosted on MongoDB Atlas.
 - **AI Platform Used:** Google Deepmind / Gemini.
@@ -108,24 +107,6 @@ sequenceDiagram
 | **Error Handling** | A centralized error middleware intercepts unhandled promise rejections, ensuring stack traces do not leak in production. |
 | **CORS Configuration** | Whitelisted origins with explicit credential allowance, rejecting cross-origin attacks. |
 | **Refresh Token Secrecy** | Refresh tokens are never exposed to the JavaScript runtime context on the client. |
-
----
-
-## Screenshots
-
-> *Placeholders for actual application screenshots*
-
-**Login Interface**
-`[Screenshot Placeholder: /assets/login.png]`
-
-**Registration Interface**
-`[Screenshot Placeholder: /assets/signup.png]`
-
-**Protected Dashboard**
-`[Screenshot Placeholder: /assets/dashboard.png]`
-
-**Architecture Diagram**
-`[Screenshot Placeholder: /assets/architecture.png]`
 
 ---
 
