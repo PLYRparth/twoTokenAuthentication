@@ -26,6 +26,7 @@ app.use(morgan('dev'));
 
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/admin', require('./routes/adminRoutes'));
 
 app.use(errorHandler);
 

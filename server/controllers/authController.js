@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 // @access  Public
 const register = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, role } = req.body;
         if (!name || !email || !password) {
             return res.status(400).json({ success: false, message: 'Please provide all fields', errors: [] });
         }
@@ -17,9 +17,9 @@ const register = async (req, res) => {
             return res.status(400).json({ success: false, message: 'User already exists', errors: [] });
         }
 
-        user = await User.create({ name, email, password });
+        user = await User.create({ name, email, password, role: role || 'EMP' });
         
-        const refreshToken = generateRefreshToken(user._id);
+        const refreshToken = generateRefreshToken(user);
         user.refreshToken = refreshToken;
         await user.save({ validateBeforeSave: false });
 
@@ -51,8 +51,8 @@ const login = async (req, res) => {
             return res.status(401).json({ success: false, message: 'Invalid credentials', errors: [] });
         }
 
-        const accessToken = generateAccessToken(user._id);
-        const refreshToken = generateRefreshToken(user._id);
+        const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
         
         user.refreshToken = refreshToken;
         await user.save({ validateBeforeSave: false });
@@ -92,8 +92,8 @@ const refresh = async (req, res) => {
             return res.status(401).json({ success: false, message: 'Invalid refresh token', errors: [] });
         }
 
-        const newAccessToken = generateAccessToken(user._id);
-        const newRefreshToken = generateRefreshToken(user._id);
+        const newAccessToken = generateAccessToken(user);
+        const newRefreshToken = generateRefreshToken(user);
 
         user.refreshToken = newRefreshToken;
         await user.save({ validateBeforeSave: false });
@@ -143,4 +143,16 @@ const getProfile = async (req, res) => {
     }
 };
 
-module.exports = { register, login, refresh, logout, getProfile };
+// @desc    Get current user
+// @route   GET /api/auth/me
+// @access  Private
+const getMe = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id).select('-password -refreshToken');
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message, errors: [] });
+    }
+};
+
+module.exports = { register, login, refresh, logout, getProfile, getMe };

@@ -15,8 +15,8 @@ export const AuthProvider = ({ children }) => {
                 // If we don't have access token, the interceptor won't trigger immediately on /profile if we don't send one, but the cookie is there.
                 // Actually the first request needs an access token to even try, or we rely on interceptor catching the 401.
                 // Let's just try to fetch profile. Interceptor will attempt refresh if needed.
-                const res = await api.get('/user/profile');
-                setUser(res.data.data);
+                const res = await api.get('/auth/me');
+                setUser(res.data);
             } catch (error) {
                 console.log('Not logged in');
             } finally {
@@ -42,13 +42,13 @@ export const AuthProvider = ({ children }) => {
             const res = await api.post('/auth/login', data);
             setAccessToken(res.data.data.accessToken);
             api.defaults.headers.common['Authorization'] = `Bearer ${res.data.data.accessToken}`;
-            const profileRes = await api.get('/user/profile');
-            setUser(profileRes.data.data);
+            const profileRes = await api.get('/auth/me');
+            setUser(profileRes.data);
             toast.success('Logged in successfully');
-            return true;
+            return { success: true, user: profileRes.data };
         } catch (error) {
             toast.error(error.response?.data?.message || 'Login failed');
-            return false;
+            return { success: false };
         }
     };
 

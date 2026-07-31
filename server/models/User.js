@@ -18,6 +18,11 @@ const UserSchema = new mongoose.Schema({
         minlength: 8,
         select: false
     },
+    role: {
+        type: String,
+        enum: ['ADMIN', 'EMP'],
+        default: 'EMP'
+    },
     refreshToken: {
         type: String,
         default: null

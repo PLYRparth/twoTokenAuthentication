@@ -5,16 +5,6 @@ export default function Dashboard() {
     
     return (
         <div className="min-h-screen p-8 max-w-5xl mx-auto">
-            <div className="flex justify-between items-center mb-12">
-                <div className="flex items-center gap-4">
-                    <span className="text-xl font-semibold text-ink">Dashboard</span>
-                </div>
-                <div className="flex items-center gap-4">
-                    <span className="text-sm text-muted">Welcome, {user.name}</span>
-                    <button onClick={logout} className="px-4 py-2 bg-canvas border border-hairline text-ink font-semibold rounded-md hover:bg-surface-soft transition">Sign out</button>
-                </div>
-            </div>
-            
             <h1 className="text-5xl font-medium mb-12 text-ink tracking-tight">Your Workspace</h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

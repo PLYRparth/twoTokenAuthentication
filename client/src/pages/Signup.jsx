@@ -8,7 +8,8 @@ const schema = z.object({
     name: z.string().min(2, 'Name is required'),
     email: z.string().email('Invalid email address'),
     password: z.string().min(8, 'Password must be at least 8 characters'),
-    confirmPassword: z.string()
+    confirmPassword: z.string(),
+    role: z.enum(['ADMIN', 'EMP'])
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",
     path: ["confirmPassword"]
@@ -50,6 +51,14 @@ export default function Signup() {
                         <label className="block text-sm font-semibold mb-2 text-ink">Confirm Password</label>
                         <input type="password" placeholder="••••••••" {...register('confirmPassword')} className="w-full px-4 py-3 bg-canvas border border-hairline rounded-md focus:outline-none focus:border-ink transition" />
                         {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword.message}</p>}
+                    </div>
+                    <div>
+                        <label className="block text-sm font-semibold mb-2 text-ink">Role</label>
+                        <select {...register('role')} className="w-full px-4 py-3 bg-canvas border border-hairline rounded-md focus:outline-none focus:border-ink transition">
+                            <option value="EMP">Employee</option>
+                            <option value="ADMIN">Admin</option>
+                        </select>
+                        {errors.role && <p className="text-red-500 text-sm mt-1">{errors.role.message}</p>}
                     </div>
                     <button disabled={isSubmitting} type="submit" className="w-full py-3 bg-primary text-white hover:bg-primary-active rounded-md font-semibold transition disabled:bg-primary-disabled disabled:text-muted">
                         {isSubmitting ? 'Creating...' : 'Sign Up'}

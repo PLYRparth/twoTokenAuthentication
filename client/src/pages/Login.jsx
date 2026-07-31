@@ -17,8 +17,11 @@ export default function Login() {
     const navigate = useNavigate();
 
     const onSubmit = async (data) => {
-        const success = await login(data);
-        if (success) navigate('/dashboard');
+        const result = await login(data);
+        if (result.success) {
+            if (result.user.role === 'ADMIN') navigate('/admin');
+            else navigate('/dashboard');
+        }
     };
 
     return (
