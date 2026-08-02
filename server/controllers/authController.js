@@ -155,4 +155,148 @@ const getMe = async (req, res) => {
     }
 };
 
-module.exports = { register, login, refresh, logout, getProfile, getMe };
+const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
+const { generateOTP } = require('../utils/otp');
+const { sendPasswordResetOTP } = require('../services/email.service');
+
+// @desc    Forgot Password
+// @route   POST /api/auth/forgot-password
+// @access  Public
+const forgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) {
+            return res.status(400).json({ success: false, message: 'Please provide an email', errors: [] });
+        }
+
+        const user = await User.findOne({ email });
+        
+        // Always return generic success response
+        res.status(200).json({ 
+            success: true, 
+            message: 'If an account exists, an OTP has been sent.' 
+        });
+
+        if (user) {
+            const otp = generateOTP();
+            const salt = await bcrypt.genSalt(10);
+            const hashedOTP = await bcrypt.hash(otp, salt);
+
+            user.resetPasswordOTP = hashedOTP;
+            user.resetPasswordOTPExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+            user.otpAttempts = 0;
+            user.lastOTPRequestAt = Date.now();
+            await user.save({ validateBeforeSave: false });
+
+            await sendPasswordResetOTP(user.email, otp);
+        }
+    } catch (error) {
+        console.error('Forgot Password Error:', error);
+        // Do not respond here because we already sent a response, 
+        // unless response headers are not sent.
+        if (!res.headersSent) {
+            res.status(500).json({ success: false, message: 'Server error', errors: [] });
+        }
+    }
+};
+
+// @desc    Verify Reset OTP
+// @route   POST /api/auth/verify-reset-otp
+// @access  Public
+const verifyResetOtp = async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+        if (!email || !otp) {
+            return res.status(400).json({ success: false, message: 'Please provide email and otp', errors: [] });
+        }
+
+        const user = await User.findOne({ email });
+        if (!user || !user.resetPasswordOTP) {
+            return res.status(400).json({ success: false, message: 'Invalid OTP.', errors: [] });
+        }
+
+        if (user.resetPasswordOTPExpires < Date.now()) {
+            return res.status(400).json({ success: false, message: 'OTP has expired.', errors: [] });
+        }
+
+        if (user.otpAttempts >= 5) {
+            user.resetPasswordOTP = undefined;
+            user.resetPasswordOTPExpires = undefined;
+            user.otpAttempts = 0;
+            await user.save({ validateBeforeSave: false });
+            return res.status(400).json({ success: false, message: 'Maximum OTP attempts exceeded.\nPlease request a new OTP.', errors: [] });
+        }
+
+        const isMatch = await bcrypt.compare(otp, user.resetPasswordOTP);
+        if (!isMatch) {
+            user.otpAttempts += 1;
+            if (user.otpAttempts >= 5) {
+                user.resetPasswordOTP = undefined;
+                user.resetPasswordOTPExpires = undefined;
+            }
+            await user.save({ validateBeforeSave: false });
+            return res.status(400).json({ success: false, message: 'Invalid OTP.', errors: [] });
+        }
+
+        user.resetPasswordOTP = undefined;
+        user.resetPasswordOTPExpires = undefined;
+        user.otpAttempts = 0;
+        await user.save({ validateBeforeSave: false });
+
+        const resetToken = jwt.sign(
+            { userId: user._id, purpose: 'PASSWORD_RESET' },
+            process.env.JWT_PASSWORD_RESET_SECRET || 'resetSecret',
+            { expiresIn: '5m' }
+        );
+
+        res.status(200).json({ success: true, resetToken });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message, errors: [] });
+    }
+};
+
+// @desc    Reset Password
+// @route   POST /api/auth/reset-password
+// @access  Private (uses reset token)
+const resetPassword = async (req, res) => {
+    try {
+        const { password } = req.body;
+        let token;
+
+        if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+            token = req.headers.authorization.split(' ')[1];
+        }
+
+        if (!token) {
+            return res.status(401).json({ success: false, message: 'Not authorized, no reset token', errors: [] });
+        }
+
+        let decoded;
+        try {
+            decoded = jwt.verify(token, process.env.JWT_PASSWORD_RESET_SECRET || 'resetSecret');
+        } catch (error) {
+            return res.status(400).json({ success: false, message: 'Reset session expired.\nPlease request a new OTP.', errors: [] });
+        }
+
+        if (decoded.purpose !== 'PASSWORD_RESET') {
+            return res.status(400).json({ success: false, message: 'Invalid token purpose', errors: [] });
+        }
+
+        const user = await User.findById(decoded.userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found', errors: [] });
+        }
+
+        user.password = password;
+        // Invalidate existing refresh tokens by setting it to null
+        user.refreshToken = null;
+        await user.save();
+
+        res.status(200).json({ success: true, message: 'Password updated successfully.' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message, errors: [] });
+    }
+};
+
+module.exports = { register, login, refresh, logout, getProfile, getMe, forgotPassword, verifyResetOtp, resetPassword };

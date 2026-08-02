@@ -39,9 +39,12 @@ export default function Login() {
                         <input type="password" placeholder="••••••••" {...register('password')} className="w-full px-4 py-3 bg-canvas border border-hairline rounded-md focus:outline-none focus:border-ink transition" />
                         {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
                     </div>
-                    <div className="flex items-center">
-                        <input type="checkbox" id="remember" className="mr-2 border-hairline" />
-                        <label htmlFor="remember" className="text-sm text-body">Remember me</label>
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                            <input type="checkbox" id="remember" className="mr-2 border-hairline" />
+                            <label htmlFor="remember" className="text-sm text-body">Remember me</label>
+                        </div>
+                        <Link to="/forgot-password" className="text-sm text-primary hover:underline font-semibold">Forgot Password?</Link>
                     </div>
                     <button disabled={isSubmitting} type="submit" className="w-full py-3 bg-primary text-white hover:bg-primary-active rounded-md font-semibold transition disabled:bg-primary-disabled disabled:text-muted">
                         {isSubmitting ? 'Signing in...' : 'Sign In'}

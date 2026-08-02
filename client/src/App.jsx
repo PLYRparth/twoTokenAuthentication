@@ -11,6 +11,9 @@ import AdminDashboard from './pages/AdminDashboard';
 import Unauthorized from './pages/Unauthorized';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ForgotPassword from './pages/ForgotPassword';
+import VerifyOTP from './pages/VerifyOTP';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
   return (
@@ -23,6 +26,9 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/verify-otp" element={<VerifyOTP />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             
             <Route element={<RoleProtectedRoute allowedRoles={['EMP', 'ADMIN']} />}>
               <Route path="/dashboard" element={<Dashboard />} />
