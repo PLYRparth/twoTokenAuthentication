@@ -15,6 +15,10 @@ connectDB();
 
 const app = express();
 
+// Trust the reverse proxy (Railway, Vercel, Heroku, etc.)
+// This is required for express-rate-limit to work correctly behind a proxy
+app.set('trust proxy', 1);
+
 app.use(helmet());
 app.use(cors({
     origin: [process.env.FRONTEND_URL, 'http://localhost:5173', 'http://127.0.0.1:5173'].filter(Boolean),
