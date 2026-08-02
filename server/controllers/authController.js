@@ -172,12 +172,6 @@ const forgotPassword = async (req, res) => {
 
         const user = await User.findOne({ email });
         
-        // Always return generic success response
-        res.status(200).json({ 
-            success: true, 
-            message: 'If an account exists, an OTP has been sent.' 
-        });
-
         if (user) {
             const otp = generateOTP();
             const salt = await bcrypt.genSalt(10);
@@ -191,10 +185,17 @@ const forgotPassword = async (req, res) => {
 
             await sendPasswordResetOTP(user.email, otp);
         }
+
+        // Always return generic success response AFTER all async tasks are done
+        // This is crucial for Serverless environments like Vercel which freeze execution after res.json()
+        if (!res.headersSent) {
+            res.status(200).json({ 
+                success: true, 
+                message: 'If an account exists, an OTP has been sent.' 
+            });
+        }
     } catch (error) {
         console.error('Forgot Password Error:', error);
-        // Do not respond here because we already sent a response, 
-        // unless response headers are not sent.
         if (!res.headersSent) {
             res.status(500).json({ success: false, message: 'Server error', errors: [] });
         }
