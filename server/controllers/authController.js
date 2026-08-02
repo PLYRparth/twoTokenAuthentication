@@ -172,26 +172,26 @@ const forgotPassword = async (req, res) => {
 
         const user = await User.findOne({ email });
         
-        if (user) {
-            const otp = generateOTP();
-            const salt = await bcrypt.genSalt(10);
-            const hashedOTP = await bcrypt.hash(otp, salt);
-
-            user.resetPasswordOTP = hashedOTP;
-            user.resetPasswordOTPExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
-            user.otpAttempts = 0;
-            user.lastOTPRequestAt = Date.now();
-            await user.save({ validateBeforeSave: false });
-
-            await sendPasswordResetOTP(user.email, otp);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'No account found with this email address.', errors: [] });
         }
 
-        // Always return generic success response AFTER all async tasks are done
-        // This is crucial for Serverless environments like Vercel which freeze execution after res.json()
+        const otp = generateOTP();
+        const salt = await bcrypt.genSalt(10);
+        const hashedOTP = await bcrypt.hash(otp, salt);
+
+        user.resetPasswordOTP = hashedOTP;
+        user.resetPasswordOTPExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+        user.otpAttempts = 0;
+        user.lastOTPRequestAt = Date.now();
+        await user.save({ validateBeforeSave: false });
+
+        await sendPasswordResetOTP(user.email, otp);
+
         if (!res.headersSent) {
             res.status(200).json({ 
                 success: true, 
-                message: 'If an account exists, an OTP has been sent.' 
+                message: 'OTP has been sent successfully to your email.' 
             });
         }
     } catch (error) {
